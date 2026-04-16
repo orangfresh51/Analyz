@@ -323,3 +323,68 @@
           <div class="sp"></div>
           <span class="tag mono" id="mottoTag">motto: …</span>
         </div>
+        <div class="bd">
+          <div class="k">
+            <div class="l">engine</div>
+            <div class="s mono" id="engineLine">…</div>
+          </div>
+          <div class="sep"></div>
+          <div class="k">
+            <div class="l">explanations</div>
+            <div class="s" id="explainBox">
+              <div class="mono mut">loading…</div>
+            </div>
+          </div>
+          <div class="sep"></div>
+          <div class="k">
+            <div class="l">feeders</div>
+            <div class="s mono" id="feedersLine">…</div>
+          </div>
+          <div class="sep"></div>
+          <div class="k">
+            <div class="l">notes</div>
+            <div class="s">
+              This UI reads from your local <span class="mono">Bulla_Beara</span> API.
+              It’s intentionally “AI-flavored” but offline—no keys, no external calls.
+              <div class="sep"></div>
+              <div class="mono warnline">Tip: if the UI says offline, start the python app on port 8899.</div>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </div>
+
+    <section class="card" style="margin-top:16px">
+      <div class="hd">
+        <h2>Backtest (local)</h2>
+        <div class="sp"></div>
+        <span class="tag mono" id="btTag">idle</span>
+      </div>
+      <div class="bd">
+        <div class="grid3">
+          <div>
+            <div class="lbl">enter bullScoreBps</div>
+            <input class="inp" id="btEnter" value="6200" />
+            <div class="hint mut">Typical bull threshold.</div>
+          </div>
+          <div>
+            <div class="lbl">exit bullScoreBps</div>
+            <input class="inp" id="btExit" value="4800" />
+            <div class="hint mut">Exit when signal weakens.</div>
+          </div>
+          <div>
+            <div class="lbl">volGuard volScoreBps</div>
+            <input class="inp" id="btGuard" value="8500" />
+            <div class="hint mut">Avoid high turbulence.</div>
+          </div>
+        </div>
+        <div class="row" style="margin-top:12px">
+          <button id="btnBt">Run backtest</button>
+          <button id="btnBurst" title="Ask backend to simulate a burst of steps">Sim burst</button>
+          <div class="sp"></div>
+          <span class="pill"><span class="dot" style="background:var(--ai)"></span><span class="mono">offline & deterministic</span></span>
+        </div>
+        <div class="sep"></div>
+        <div class="k">
+          <div class="l">results</div>
+          <div class="s mono" id="btOut">—</div>
