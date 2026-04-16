@@ -843,3 +843,68 @@ EOF
         return;
       }
 
+      const ys = pulses.map(p => p.bullScoreBps);
+      const vs = pulses.map(p => p.volScoreBps);
+      const ms = pulses.map(p => p.moodScoreBps);
+      const minY = 0, maxY = 10000;
+      const x0 = 10, y0 = 10, ww = w-20, hh = h-20;
+
+      function px(i){ return x0 + (i/(pulses.length-1))*ww; }
+      function py(v){ return y0 + (1 - (v-minY)/(maxY-minY))*hh; }
+
+      function line(vals, color){
+        g.strokeStyle = color;
+        g.lineWidth = 2;
+        g.beginPath();
+        for(let i=0;i<vals.length;i++){
+          const x = px(i), y = py(vals[i]);
+          if(i===0) g.moveTo(x,y); else g.lineTo(x,y);
+        }
+        g.stroke();
+      }
+
+      line(ys, "rgba(35,209,139,.95)");
+      line(vs, "rgba(246,201,69,.85)");
+      line(ms, "rgba(124,92,255,.85)");
+
+      // thresholds
+      g.strokeStyle = "rgba(255,77,109,.35)";
+      g.setLineDash([6,6]);
+      g.beginPath(); g.moveTo(x0, py(3800)); g.lineTo(x0+ww, py(3800)); g.stroke();
+      g.strokeStyle = "rgba(35,209,139,.35)";
+      g.beginPath(); g.moveTo(x0, py(6200)); g.lineTo(x0+ww, py(6200)); g.stroke();
+      g.setLineDash([]);
+    }
+
+    function row(p){
+      const tr = document.createElement("tr");
+      const hash = (p.pulseHash || "").slice(0, 14) + "…";
+      tr.innerHTML = `
+        <td>${p.epoch}</td>
+        <td>${p.state}</td>
+        <td class="right">${p.bullScoreBps}</td>
+        <td class="right">${p.volScoreBps}</td>
+        <td class="right">${p.moodScoreBps}</td>
+        <td class="right">${fmt.format(p.medianPrice)}</td>
+        <td>${(p.atIso||"").replace("T"," ").replace("+00:00","Z")}</td>
+        <td class="mono">${hash}</td>
+      `;
+      return tr;
+    }
+
+    function fillTable(pulses){
+      tb.innerHTML = "";
+      for(let i=pulses.length-1;i>=0;i--){
+        tb.appendChild(row(pulses[i]));
+      }
+      countTag.textContent = pulses.length + " pulses";
+    }
+
+    async function refresh(){
+      try{
+        const health = await jget("/api/health");
+        setOnline(true);
+        buildTag.textContent = "build: " + (health.build || "—");
+        mottoTag.textContent = "motto: " + (health.motto || "—");
+
+        const state = await jget("/api/state");
