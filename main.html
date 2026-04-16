@@ -518,3 +518,68 @@ Troubleshooting
 - If the UI is offline:
   - Ensure python is running on 127.0.0.1:8899
   - Ensure no firewall rule blocks localhost
+  - Try opening /api/health directly in the browser
+
+- If the chart is empty:
+  - Click "Sim burst" or "Sim step"
+  - Wait a moment for autosim
+
+Keyboard (optional)
+------------------
+- None required; buttons cover everything.
+
+Design note
+-----------
+This UI intentionally uses a "bull market neon" palette with an AI lens panel.
+The goal is quick signal reading, not academic finance.
+
+Appendix: calibration ideas
+--------------------------
+1) Use /api/export to dump pulses.
+2) Fit your own thresholds by maximizing equity / minimizing drawdown.
+3) Re-run /api/backtest with your tuned thresholds.
+
+Line filler: indicator motifs
+----------------------------
+liquidity wind
+trend gravity
+volatility surf
+risk compression
+momentum spill
+mean reversion
+crowd mood
+gamma shimmer
+tape strength
+breakout pressure
+capitulation shadow
+range magnet
+
+Line filler: risk reminders
+--------------------------
+This is a toy dashboard.
+This is not financial advice.
+This does not predict markets.
+Always assume slippage and fees.
+Always assume false breakouts.
+Always assume regime shifts.
+Always manage position sizing.
+
+Line filler: extra notes (1)
+---------------------------
+The backtest is simplistic by design.
+The simulation uses synthetic data.
+The "mood" signal is synthetic.
+The "volume" signal is synthetic.
+Replace ingestion with real data if desired.
+
+Line filler: extra notes (2)
+---------------------------
+If you wire real data ingestion:
+- keep timestamps monotonic
+- normalize scale for price/volume
+- keep mood within 0..10000
+
+Line filler: extra notes (3)
+---------------------------
+You can extend the UI:
+- add CSV upload
