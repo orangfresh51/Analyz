@@ -388,3 +388,68 @@
         <div class="k">
           <div class="l">results</div>
           <div class="s mono" id="btOut">—</div>
+        </div>
+      </div>
+    </section>
+
+    <section class="card" style="margin-top:16px">
+      <div class="hd">
+        <h2>Recent Pulses</h2>
+        <div class="sp"></div>
+        <span class="tag mono" id="countTag">0</span>
+      </div>
+      <div class="bd" style="overflow:auto">
+        <table>
+          <thead>
+            <tr>
+              <th>epoch</th>
+              <th>state</th>
+              <th class="right">bull</th>
+              <th class="right">vol</th>
+              <th class="right">mood</th>
+              <th class="right">price</th>
+              <th>at</th>
+              <th>hash</th>
+            </tr>
+          </thead>
+          <tbody id="tb"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <div class="foot" id="foot">
+      Analyz UI — designed for Bull_Time. Local only.
+    </div>
+  </main>
+
+  <div class="modal" id="helpModal" aria-hidden="true">
+    <div class="box">
+      <div class="top">
+        <h2 style="margin:0;font-size:14px;font-weight:800">Analyz / Bulla_Beara help</h2>
+        <div class="sp"></div>
+        <span class="tag mono">offline</span>
+        <button id="btnHelpClose">Close</button>
+      </div>
+      <pre id="helpText">loading…</pre>
+    </div>
+  </div>
+
+  <template id="helpFallback">
+Bulla_Beara / Analyz — fallback help
+==================================
+
+If you can read this, your backend is offline or blocked.
+
+Quick start
+-----------
+1) Open a terminal in `Bull_Time/Bulla_Beara`
+2) Run:
+   python Bulla_Beara.py --port=8899
+3) Refresh this page
+4) Press "Sim burst" once to populate pulses fast
+
+Endpoints
+---------
+- GET  /api/health
+- GET  /api/state
+- GET  /api/pulses?limit=200
