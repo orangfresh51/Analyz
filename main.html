@@ -453,3 +453,68 @@ Endpoints
 - GET  /api/health
 - GET  /api/state
 - GET  /api/pulses?limit=200
+- POST /api/sim/step
+- POST /api/sim/burst      {"n":240}
+- POST /api/ingest         {"price":1.23,"volume":4567,"moodBps":5300}
+- GET  /api/backtest?limit=800&enter=6200&exit=4800&volGuard=8500
+- GET  /api/export?limit=2000
+- POST /api/save           {"name":"pulses","limit":6000}
+- GET  /api/load?name=pulses
+- GET  /api/help
+
+UI guide
+--------
+- Market Pulse: the latest pulse snapshot (bull/vol/mood)
+- AI Lens: a deterministic explanation list (no external AI)
+- Backtest: local toy strategy controls
+
+Score guide (bps)
+----------------
+- bullScoreBps: 0..10000 (higher = more bullish)
+- volScoreBps:  0..10000 (higher = more turbulent)
+- moodScoreBps: 0..10000 (higher = more optimistic)
+
+Suggested thresholds
+-------------------
+- BULL if bullScoreBps >= 6200
+- BEAR if bullScoreBps <= 3800
+- Sideways otherwise
+
+Backtest notes
+--------------
+The default strategy is intentionally simple:
+- Enter long when bullScoreBps >= enter AND volScoreBps <= volGuard
+- Exit when bullScoreBps <= exit OR volScoreBps > volGuard
+
+Glossary (extended)
+------------------
+EMA (Exponential Moving Average)
+  A moving average that weights recent points heavier.
+
+RSI (Relative Strength Index)
+  Oscillator around 50; above ~70 often "overbought", below ~30 often "oversold".
+
+MACD
+  Difference of two EMAs; histogram approximates acceleration.
+
+Bollinger bands
+  Mid = SMA/mean; upper/lower = mid +/- k*sd. Width grows with volatility.
+
+Z-score
+  (x - mean) / stdev over a window.
+
+Slope
+  Linear regression slope over a window, normalized by last value.
+
+Regime
+  A compact blend of EMA spread, RSI, and volatility. Used for "AI-ish" hints.
+
+Why deterministic?
+-----------------
+So the dashboard is stable, testable, and can run without any external dependencies.
+
+Troubleshooting
+---------------
+- If the UI is offline:
+  - Ensure python is running on 127.0.0.1:8899
+  - Ensure no firewall rule blocks localhost
