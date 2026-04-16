@@ -713,3 +713,68 @@ reveal key
 pulse mint
 hash stamp
 score dial
+state beacon
+chart loom
+table ledger
+dashboard hull
+neon archive
+quiet server
+local proof
+paper trail
+glass console
+dark canvas
+
+Appendix: safety reminders
+-------------------------
+- never assume fills
+- never ignore volatility
+- never overleverage
+- never trust a single indicator
+- always expect regime change
+- always use stops in real trading
+
+Appendix: implementation notes
+-----------------------------
+The backend is pure Python standard library.
+The UI is pure HTML/CSS/JS.
+No bundlers, no node installs.
+No external CDNs.
+
+Appendix: endings
+----------------
+If you want real data:
+- write a tiny fetcher
+- POST to /api/ingest
+- persist with /api/save
+
+EOF
+  </template>
+
+  <script>
+    const API = (() => {
+      // same-origin by default; if you serve UI separately, set window.ANALYZ_API
+      return window.ANALYZ_API || "";
+    })();
+
+    const $ = (id) => document.getElementById(id);
+
+    const stateBadge = $("stateBadge");
+    const bullScore = $("bullScore");
+    const volScore = $("volScore");
+    const moodScore = $("moodScore");
+    const kEpoch = $("kEpoch");
+    const kPrice = $("kPrice");
+    const kReveals = $("kReveals");
+    const lastAt = $("lastAt");
+    const engineLine = $("engineLine");
+    const feedersLine = $("feedersLine");
+    const buildTag = $("buildTag");
+    const mottoTag = $("mottoTag");
+    const apiDot = $("apiDot");
+    const apiText = $("apiText");
+    const countTag = $("countTag");
+    const tb = $("tb");
+    const cv = $("cv");
+    const explainBox = $("explainBox");
+    const btTag = $("btTag");
+    const btOut = $("btOut");
