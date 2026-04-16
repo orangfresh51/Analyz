@@ -908,3 +908,68 @@ EOF
         mottoTag.textContent = "motto: " + (health.motto || "—");
 
         const state = await jget("/api/state");
+        kEpoch.textContent = state.epoch ?? "—";
+        if(state.lastPulse){
+          const p = state.lastPulse;
+          badge(p.state);
+          bullScore.textContent = p.bullScoreBps;
+          volScore.textContent = p.volScoreBps;
+          moodScore.textContent = p.moodScoreBps;
+          kPrice.textContent = fmt.format(p.medianPrice);
+          kReveals.textContent = p.revealsUsed;
+          lastAt.textContent = "at " + (p.atIso||"—").replace("T"," ").replace("+00:00","Z");
+        } else {
+          badge("UNKNOWN");
+          bullScore.textContent = "0"; volScore.textContent="0"; moodScore.textContent="0";
+          kPrice.textContent = "—"; kReveals.textContent="—";
+          lastAt.textContent = "—";
+        }
+        const eng = state.engine || {};
+        engineLine.textContent = [
+          "n=" + (eng.n ?? 0),
+          "ema13=" + (eng.emaFast ?? 0).toFixed ? (eng.emaFast).toFixed(6) : (eng.emaFast ?? 0),
+          "ema55=" + (eng.emaSlow ?? 0).toFixed ? (eng.emaSlow).toFixed(6) : (eng.emaSlow ?? 0),
+          "rsi=" + (eng.rsi ?? 0).toFixed ? (eng.rsi).toFixed(2) : (eng.rsi ?? 0),
+          "reg=" + (eng.regime ?? 0).toFixed ? (eng.regime).toFixed(3) : (eng.regime ?? 0)
+        ].join("  ");
+        feedersLine.textContent = (state.feeders || []).slice(0, 5).join("  ") + ((state.feeders||[]).length>5 ? "  …" : "");
+        const exps = state.explanations || [];
+        explainBox.innerHTML = "";
+        if(exps.length){
+          for(const e of exps){
+            const div = document.createElement("div");
+            div.className = "mono";
+            const sc = (e.score ?? 0);
+            const c = sc > 0.2 ? "okline" : (sc < -0.2 ? "badline" : "mut");
+            div.innerHTML = `<span class="${c}">${(e.label||"x")}</span>  <span class="mut">${(e.text||"")}</span>`;
+            explainBox.appendChild(div);
+          }
+        } else {
+          explainBox.innerHTML = `<div class="mono mut">no explanations yet</div>`;
+        }
+
+        const ps = await jget("/api/pulses?limit=220");
+        const pulses = (ps.pulses || []);
+        fillTable(pulses);
+        drawChart(pulses.slice(-120));
+      } catch(e){
+        setOnline(false);
+      }
+    }
+
+    let auto = true;
+    let timer = null;
+
+    function setAuto(v){
+      auto = v;
+      $("btnAuto").textContent = auto ? "Auto: on" : "Auto: off";
+      if(timer) clearInterval(timer);
+      if(auto){
+        timer = setInterval(refresh, 1250);
+      }
+    }
+
+    $("btnStep").addEventListener("click", async () => {
+      try { await jpost("/api/sim/step"); } catch(e){}
+      await refresh();
+    });
