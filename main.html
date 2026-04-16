@@ -778,3 +778,68 @@ EOF
     const explainBox = $("explainBox");
     const btTag = $("btTag");
     const btOut = $("btOut");
+    const helpModal = $("helpModal");
+    const helpText = $("helpText");
+
+    const fmt = new Intl.NumberFormat(undefined, { maximumFractionDigits: 4 });
+
+    function badge(state){
+      stateBadge.textContent = state;
+      stateBadge.classList.remove("bull","bear","side","unk");
+      if(state === "BULL") stateBadge.classList.add("bull");
+      else if(state === "BEAR") stateBadge.classList.add("bear");
+      else if(state === "SIDEWAYS") stateBadge.classList.add("side");
+      else stateBadge.classList.add("unk");
+    }
+
+    async function jget(path){
+      const r = await fetch(API + path, { headers: { "Accept": "application/json" } });
+      if(!r.ok) throw new Error("HTTP " + r.status);
+      return await r.json();
+    }
+    async function jpost(path, body){
+      const r = await fetch(API + path, {
+        method:"POST",
+        headers:{ "Content-Type":"application/json", "Accept":"application/json" },
+        body: body ? JSON.stringify(body) : "{}"
+      });
+      if(!r.ok) throw new Error("HTTP " + r.status);
+      return await r.json();
+    }
+
+    function setOnline(ok){
+      apiDot.classList.toggle("ok", ok);
+      apiDot.classList.toggle("no", !ok);
+      apiText.textContent = ok ? "online" : "offline";
+    }
+
+    function drawChart(pulses){
+      const dpr = window.devicePixelRatio || 1;
+      const w = cv.clientWidth;
+      const h = cv.clientHeight;
+      cv.width = Math.floor(w * dpr);
+      cv.height = Math.floor(h * dpr);
+      const g = cv.getContext("2d");
+      g.scale(dpr,dpr);
+      g.clearRect(0,0,w,h);
+
+      // grid
+      g.globalAlpha = 1;
+      g.strokeStyle = "rgba(31,42,82,.55)";
+      g.lineWidth = 1;
+      for(let i=0;i<=5;i++){
+        const y = (h-20) * (i/5) + 10;
+        g.beginPath(); g.moveTo(10,y); g.lineTo(w-10,y); g.stroke();
+      }
+      for(let i=0;i<=8;i++){
+        const x = (w-20) * (i/8) + 10;
+        g.beginPath(); g.moveTo(x,10); g.lineTo(x,h-10); g.stroke();
+      }
+
+      if(!pulses || pulses.length<2){
+        g.fillStyle = "rgba(187,208,255,.8)";
+        g.font = "13px ui-monospace";
+        g.fillText("waiting for pulses…", 16, 26);
+        return;
+      }
+
