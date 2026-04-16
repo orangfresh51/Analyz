@@ -258,3 +258,68 @@
         </div>
         <button id="btnStep" title="Ask the backend to simulate one step">Sim step</button>
         <button id="btnAuto" title="Toggle client-side polling">Auto</button>
+        <button id="btnHelp" title="Show local help">Help</button>
+      </div>
+    </div>
+  </header>
+
+  <main class="wrap">
+    <div class="grid">
+      <section class="card aiGlow">
+        <div class="hd">
+          <h2>Market Pulse</h2>
+          <div class="sp"></div>
+          <div class="state">
+            <span class="mut">state</span>
+            <span class="badge unk" id="stateBadge">UNKNOWN</span>
+            <span class="mut">bull</span>
+            <span class="mono" id="bullScore">0</span>
+            <span class="mut">vol</span>
+            <span class="mono" id="volScore">0</span>
+            <span class="mut">mood</span>
+            <span class="mono" id="moodScore">0</span>
+          </div>
+        </div>
+        <div class="bd">
+          <div class="kpi">
+            <div class="k">
+              <div class="l">epoch</div>
+              <div class="v" id="kEpoch">—</div>
+              <div class="s mut">backend epoch cursor</div>
+            </div>
+            <div class="k">
+              <div class="l">median price</div>
+              <div class="v" id="kPrice">—</div>
+              <div class="s mut">synthetic or ingested</div>
+            </div>
+            <div class="k">
+              <div class="l">reveals</div>
+              <div class="v" id="kReveals">—</div>
+              <div class="s mut">contributors used</div>
+            </div>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="chart">
+            <canvas id="cv"></canvas>
+          </div>
+
+          <div class="sep"></div>
+
+          <div class="row mini">
+            <div class="pill"><span class="dot ok"></span><span class="mono">bullScoreBps</span></div>
+            <div class="pill"><span class="dot" style="background:var(--warn)"></span><span class="mono">volScoreBps</span></div>
+            <div class="pill"><span class="dot" style="background:var(--ai)"></span><span class="mono">moodScoreBps</span></div>
+            <div class="sp"></div>
+            <div class="mono mut" id="lastAt">—</div>
+          </div>
+        </div>
+      </section>
+
+      <aside class="card">
+        <div class="hd">
+          <h2>AI Lens</h2>
+          <div class="sp"></div>
+          <span class="tag mono" id="mottoTag">motto: …</span>
+        </div>
