@@ -973,3 +973,63 @@ EOF
       try { await jpost("/api/sim/step"); } catch(e){}
       await refresh();
     });
+    $("btnBt").addEventListener("click", async () => {
+      btTag.textContent = "running…";
+      try{
+        const enter = parseInt($("btEnter").value||"6200",10);
+        const exit = parseInt($("btExit").value||"4800",10);
+        const guard = parseInt($("btGuard").value||"8500",10);
+        const r = await jget(`/api/backtest?limit=1200&enter=${enter}&exit=${exit}&volGuard=${guard}`);
+        btTag.textContent = "done";
+        if(r && r.ok){
+          btOut.textContent = `n=${r.n}  equity=${(r.equity||0).toFixed ? (r.equity).toFixed(6) : r.equity}  trades=${r.trades}  maxDD=${(r.maxDrawdown||0).toFixed ? (r.maxDrawdown).toFixed(4) : r.maxDrawdown}`;
+        } else {
+          btOut.textContent = "error";
+        }
+      } catch(e){
+        btTag.textContent = "error";
+        btOut.textContent = "error";
+      }
+    });
+    $("btnBurst").addEventListener("click", async () => {
+      btTag.textContent = "burst…";
+      try{ await jpost("/api/sim/burst", { n: 240 }); } catch(e){}
+      btTag.textContent = "idle";
+      await refresh();
+    });
+    $("btnHelp").addEventListener("click", async () => {
+      helpModal.classList.add("on");
+      helpModal.setAttribute("aria-hidden","false");
+      try{
+        const r = await fetch(API + "/api/help");
+        helpText.textContent = await r.text();
+      } catch(e){
+        const t = document.getElementById("helpFallback");
+        helpText.textContent = (t && t.content) ? t.content.textContent.trim() : "Help not available (backend offline).";
+      }
+    });
+    $("btnHelpClose").addEventListener("click", () => {
+      helpModal.classList.remove("on");
+      helpModal.setAttribute("aria-hidden","true");
+    });
+    helpModal.addEventListener("click", (ev) => {
+      if(ev.target === helpModal){
+        helpModal.classList.remove("on");
+        helpModal.setAttribute("aria-hidden","true");
+      }
+    });
+    $("btnAuto").addEventListener("click", () => setAuto(!auto));
+
+    // boot
+    setAuto(true);
+    refresh();
+    window.addEventListener("resize", () => {
+      try{
+        // redraw from current table data if possible
+        // (cheap: just refresh)
+        refresh();
+      }catch(e){}
+    });
+  </script>
+</body>
+</html>
